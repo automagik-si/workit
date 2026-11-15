@@ -75,7 +75,7 @@ Microsoft, and the refresh token lands in the operator's Workit keyring under th
 3. On the operator machine:
 
    ```bash
-   WK_M365_BROKER_TOKEN=... wk --json auth m365 login-link bernardo@example.com --base-url https://<public-base-url>
+   WK_M365_BROKER_TOKEN=... wk --json auth m365 login-link alex@example.com --base-url https://<public-base-url>
    ```
 
    The first JSON document carries `login_url`; send it to the user. The command then waits until
@@ -109,8 +109,8 @@ go build -o auth-server .
 docker build -t workit-auth-server .
 docker run -p 8080:8080 \
   -e WK_PUBLIC_BASE_URL="https://auth.hv.example" \
-  -e WK_M365_CLIENT_ID="<hapvida-entra-app-client-id>" \
-  -e WK_M365_TENANT_ID="<hapvida-tenant-id>" \
+  -e WK_M365_CLIENT_ID="<your-entra-app-client-id>" \
+  -e WK_M365_TENANT_ID="<example-tenant-id>" \
   -e WK_M365_BROKER_TOKEN="<strong-random-admin-token>" \
   workit-auth-server
 ```

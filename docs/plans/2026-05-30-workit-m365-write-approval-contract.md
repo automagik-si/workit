@@ -1,6 +1,6 @@
 # Workit M365 Write Approval Contract
 
-**Context:** Hapvida/Bernardo M365 integration through Workit + KHAW + Hermes.
+**Context:** Pilot M365 integration through Workit + KHAW + Hermes.
 
 **Decision:** The first pilot is read-only. Any future non-read-only operation is impossible unless the Hermes approval harness is available and a human approves the exact operation through the gateway popup. Telegram is the first approval surface; the contract must remain platform-generic for Discord/Slack/Teams/etc. later.
 
@@ -108,7 +108,7 @@ Suggested payload:
   "approval_id": "uuid",
   "system": "khaw-workit",
   "provider": "m365",
-  "account": "bernardo@... or redacted principal id",
+  "account": "alex@... or redacted principal id",
   "operation_class": "write",
   "operation": "send_email | create_event | update_event | teams_post | share_file",
   "workit_command_hash": "sha256 exact command/payload",
@@ -129,7 +129,7 @@ The Telegram popup should show, in Portuguese by default for Hapvida:
 ⚠️ Aprovação necessária — Workit/M365
 
 Operação: enviar e-mail
-Conta: Bernardo / Hapvida
+Conta: Alex / Example
 Destinatários: ana@..., joao@...
 Assunto: Revisão do briefing
 Efeito: e-mail será enviado de verdade
