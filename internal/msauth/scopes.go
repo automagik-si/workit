@@ -25,7 +25,7 @@ func canonicalPilotScope(raw string) (string, bool) {
 }
 
 // PilotAllowedScopes returns a defensive copy of the only Microsoft Graph scopes
-// Hapvida/Bernardo's M365 pilot may request. The pilot is intentionally read-only.
+// the M365 pilot may request. The pilot is intentionally read-only.
 func PilotAllowedScopes() []string {
 	out := make([]string, len(pilotAllowedScopes))
 	copy(out, pilotAllowedScopes)

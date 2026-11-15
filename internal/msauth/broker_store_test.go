@@ -63,12 +63,12 @@ func TestMemoryBrokerStoreRejectsExpiredSession(t *testing.T) {
 }
 
 func TestValidateBrokerAuthorizedEmailFailsClosedOnMismatch(t *testing.T) {
-	err := ValidateBrokerAuthorizedEmail(BrokerSession{ExpectedEmail: "bernardo@hapvida.com.br"}, "other@hapvida.com.br")
+	err := ValidateBrokerAuthorizedEmail(BrokerSession{ExpectedEmail: "alex@example.com"}, "other@example.com")
 	if !errors.Is(err, ErrBrokerEmailMismatch) {
 		t.Fatalf("expected email mismatch, got %v", err)
 	}
 
-	if err := ValidateBrokerAuthorizedEmail(BrokerSession{ExpectedEmail: "Bernardo@Hapvida.com.br"}, "bernardo@hapvida.com.br"); err != nil {
+	if err := ValidateBrokerAuthorizedEmail(BrokerSession{ExpectedEmail: "Alex@Example.com"}, "alex@example.com"); err != nil {
 		t.Fatalf("expected normalized email match, got %v", err)
 	}
 }

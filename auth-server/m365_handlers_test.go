@@ -23,12 +23,12 @@ func TestM365SessionsCreatesEnterpriseOneClickURL(t *testing.T) {
 		GoogleRedirectURL:  "https://auth.hv.example/callback",
 		M365Enabled:        true,
 		M365ClientID:       "m365-client",
-		M365TenantID:       "hapvida-tenant",
+		M365TenantID:       "example-tenant",
 		M365AdminToken:     "admin-token",
 		PublicBaseURL:      "https://auth.hv.example",
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"Bernardo@Hapvida.com.br"}`))
+	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"Alex@Example.com"}`))
 	req.Header.Set("Authorization", "Bearer admin-token")
 	rec := httptest.NewRecorder()
 
@@ -47,7 +47,7 @@ func TestM365SessionsCreatesEnterpriseOneClickURL(t *testing.T) {
 	if !strings.HasPrefix(loginURL, "https://auth.hv.example/m365/start/") {
 		t.Fatalf("login_url = %q", loginURL)
 	}
-	if body["expected_email"] != "bernardo@hapvida.com.br" {
+	if body["expected_email"] != "alex@example.com" {
 		t.Fatalf("expected_email = %#v", body["expected_email"])
 	}
 	if _, exists := body["code_verifier"]; exists {
@@ -63,12 +63,12 @@ func TestM365SessionsRequireAdminBearerToken(t *testing.T) {
 		GoogleRedirectURL:  "https://auth.hv.example/callback",
 		M365Enabled:        true,
 		M365ClientID:       "m365-client",
-		M365TenantID:       "hapvida-tenant",
+		M365TenantID:       "example-tenant",
 		M365AdminToken:     "admin-token",
 		PublicBaseURL:      "https://auth.hv.example",
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"bernardo@hapvida.com.br"}`))
+	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"alex@example.com"}`))
 	rec := httptest.NewRecorder()
 	server.ServeHTTP(rec, req)
 
@@ -85,12 +85,12 @@ func TestM365StartRedirectsToMicrosoftAuthorize(t *testing.T) {
 		GoogleRedirectURL:  "https://auth.hv.example/callback",
 		M365Enabled:        true,
 		M365ClientID:       "m365-client",
-		M365TenantID:       "hapvida-tenant",
+		M365TenantID:       "example-tenant",
 		M365AdminToken:     "admin-token",
 		PublicBaseURL:      "https://auth.hv.example",
 	})
 
-	createReq := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"bernardo@hapvida.com.br"}`))
+	createReq := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"alex@example.com"}`))
 	createReq.Header.Set("Authorization", "Bearer admin-token")
 	createRec := httptest.NewRecorder()
 	server.ServeHTTP(createRec, createReq)
@@ -110,7 +110,7 @@ func TestM365StartRedirectsToMicrosoftAuthorize(t *testing.T) {
 	}
 
 	location := startRec.Header().Get("Location")
-	for _, want := range []string{"https://login.microsoftonline.com/hapvida-tenant/oauth2/v2.0/authorize", "client_id=m365-client", "redirect_uri=https%3A%2F%2Fauth.hv.example%2Fm365%2Fcallback", "code_challenge_method=S256"} {
+	for _, want := range []string{"https://login.microsoftonline.com/example-tenant/oauth2/v2.0/authorize", "client_id=m365-client", "redirect_uri=https%3A%2F%2Fauth.hv.example%2Fm365%2Fcallback", "code_challenge_method=S256"} {
 		if !strings.Contains(location, want) {
 			t.Fatalf("redirect missing %s: %s", want, location)
 		}
@@ -130,7 +130,7 @@ func TestM365StartUnknownStateRendersHTML(t *testing.T) {
 		GoogleRedirectURL:  "https://auth.hv.example/callback",
 		M365Enabled:        true,
 		M365ClientID:       "m365-client",
-		M365TenantID:       "hapvida-tenant",
+		M365TenantID:       "example-tenant",
 		M365AdminToken:     "admin-token",
 		PublicBaseURL:      "https://auth.hv.example",
 	})
@@ -148,11 +148,11 @@ func TestM365StartUnknownStateRendersHTML(t *testing.T) {
 }
 
 func TestValidateM365EmailDoesNotExposePII(t *testing.T) {
-	err := validateM365Email("bernardo@hapvida.com.br", "other@hapvida.com.br")
+	err := validateM365Email("alex@example.com", "other@example.com")
 	if err == nil {
 		t.Fatal("expected mismatch")
 	}
-	if strings.Contains(err.Error(), "bernardo") || strings.Contains(err.Error(), "other") {
+	if strings.Contains(err.Error(), "alex") || strings.Contains(err.Error(), "other") {
 		t.Fatalf("PII leaked in error: %v", err)
 	}
 }
@@ -180,7 +180,7 @@ func TestM365SessionsFailClosedWhenServerConfigMissing(t *testing.T) {
 		PublicBaseURL:      "https://auth.hv.example",
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"bernardo@hapvida.com.br"}`))
+	req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"alex@example.com"}`))
 	rec := httptest.NewRecorder()
 
 	server.ServeHTTP(rec, req)
@@ -207,7 +207,7 @@ type m365TestBroker struct {
 func newM365TestBroker(t *testing.T) *m365TestBroker {
 	t.Helper()
 
-	b := &m365TestBroker{audit: &bytes.Buffer{}, meEmail: "Bernardo@Hapvida.com.br", orgID: testM365TenantID}
+	b := &m365TestBroker{audit: &bytes.Buffer{}, meEmail: "Alex@Example.com", orgID: testM365TenantID}
 	ms := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch {
@@ -220,7 +220,7 @@ func newM365TestBroker(t *testing.T) *m365TestBroker {
 		case r.URL.Path == "/organization":
 			_ = json.NewEncoder(w).Encode(map[string]any{"value": []any{map[string]any{
 				"id":              b.orgID,
-				"verifiedDomains": []any{map[string]string{"name": "hapvida.com.br"}},
+				"verifiedDomains": []any{map[string]string{"name": "example.com"}},
 			}}})
 		default:
 			http.NotFound(w, r)
@@ -258,7 +258,7 @@ func (b *m365TestBroker) do(method, target, body string) *httptest.ResponseRecor
 func (b *m365TestBroker) newSession(t *testing.T) (string, string, *url.URL) {
 	t.Helper()
 
-	rec := b.do(http.MethodPost, "/m365/sessions", `{"expected_email":"bernardo@hapvida.com.br"}`)
+	rec := b.do(http.MethodPost, "/m365/sessions", `{"expected_email":"alex@example.com"}`)
 	if rec.Code != http.StatusOK {
 		t.Fatalf("create session status = %d body = %s", rec.Code, rec.Body.String())
 	}
@@ -317,12 +317,12 @@ func TestM365CallbackStoresTokenUnderPollKeyOnly(t *testing.T) {
 	}
 
 	audit := b.audit.String()
-	for _, want := range []string{`"msg":"m365.link_created"`, `"msg":"m365.callback_ok"`, `"email":"b***@hapvida.com.br"`, `"tenant":"` + testM365TenantID + `"`} {
+	for _, want := range []string{`"msg":"m365.link_created"`, `"msg":"m365.callback_ok"`, `"email":"a***@example.com"`, `"tenant":"` + testM365TenantID + `"`} {
 		if !strings.Contains(audit, want) {
 			t.Fatalf("audit missing %s:\n%s", want, audit)
 		}
 	}
-	for _, secret := range []string{"rt-secret", "at-secret", "auth-code", pollKey, state, b.verifier, "bernardo@"} {
+	for _, secret := range []string{"rt-secret", "at-secret", "auth-code", pollKey, state, b.verifier, "alex@"} {
 		if strings.Contains(strings.ToLower(audit), strings.ToLower(secret)) {
 			t.Fatalf("audit leaked %q:\n%s", secret, audit)
 		}
@@ -388,7 +388,7 @@ func TestM365CallbackIdentityMismatchFailsClosed(t *testing.T) {
 		mutate func(*m365TestBroker)
 		reason string
 	}{
-		{"email", func(b *m365TestBroker) { b.meEmail = "someone.else@hapvida.com.br" }, "email_mismatch"},
+		{"email", func(b *m365TestBroker) { b.meEmail = "someone.else@example.com" }, "email_mismatch"},
 		{"tenant", func(b *m365TestBroker) { b.orgID = "99999999-0000-0000-0000-000000000000" }, "tenant_mismatch"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -419,7 +419,7 @@ func TestM365SessionsRefuseUnpinnedTenant(t *testing.T) {
 			M365AdminToken: "admin-token",
 			PublicBaseURL:  "https://auth.hv.example",
 		})
-		req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"bernardo@hapvida.com.br"}`))
+		req := httptest.NewRequest(http.MethodPost, "/m365/sessions", strings.NewReader(`{"expected_email":"alex@example.com"}`))
 		req.Header.Set("Authorization", "Bearer admin-token")
 		rec := httptest.NewRecorder()
 		server.ServeHTTP(rec, req)
@@ -434,10 +434,10 @@ func TestValidateM365TenantAcceptsIDOrVerifiedDomain(t *testing.T) {
 	if err := validateM365Tenant(testM365TenantID, strings.ToUpper(testM365TenantID), nil); err != nil {
 		t.Fatalf("tenant id: %v", err)
 	}
-	if err := validateM365Tenant("hapvida.com.br", testM365TenantID, []string{"Hapvida.com.br"}); err != nil {
+	if err := validateM365Tenant("example.com", testM365TenantID, []string{"Example.com"}); err != nil {
 		t.Fatalf("verified domain: %v", err)
 	}
-	if err := validateM365Tenant("hapvida.com.br", testM365TenantID, []string{"contoso.com"}); err == nil {
+	if err := validateM365Tenant("example.com", testM365TenantID, []string{"contoso.com"}); err == nil {
 		t.Fatal("expected mismatch")
 	}
 }

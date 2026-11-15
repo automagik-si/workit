@@ -26,7 +26,7 @@ func TestCreateBrokerSessionBuildsOneClickLoginLinkWithoutWriteScopes(t *testing
 	randomStateFn = func() (string, error) { return "opaque-state", nil }
 
 	session, err := CreateBrokerSession(context.Background(), BrokerSessionOptions{
-		ExpectedEmail: "Bernardo@Hapvida.com.br",
+		ExpectedEmail: "Alex@Example.com",
 		BaseURL:       "https://login.workit.ai",
 		CallbackURL:   "https://login.workit.ai/m365/callback",
 		Readonly:      true,
@@ -40,7 +40,7 @@ func TestCreateBrokerSessionBuildsOneClickLoginLinkWithoutWriteScopes(t *testing
 		t.Fatalf("login url = %q", session.LoginURL)
 	}
 
-	if session.ExpectedEmail != "bernardo@hapvida.com.br" {
+	if session.ExpectedEmail != "alex@example.com" {
 		t.Fatalf("expected email = %q", session.ExpectedEmail)
 	}
 

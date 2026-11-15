@@ -15,7 +15,7 @@ func TestM365ReadOnlyPilotCommandsAreExposed(t *testing.T) {
 	}{
 		{
 			name: "outlook search",
-			args: []string{"--json", "--read-only", "m365", "outlook", "search", "--query", "from:felipe"},
+			args: []string{"--json", "--read-only", "m365", "outlook", "search", "--query", "from:sam"},
 			want: "m365.outlook.search",
 		},
 		{
@@ -30,7 +30,7 @@ func TestM365ReadOnlyPilotCommandsAreExposed(t *testing.T) {
 		},
 		{
 			name: "calendar freebusy",
-			args: []string{"--json", "--read-only", "m365", "calendar", "freebusy", "--users", "bernardo@example.com,felipe@example.com"},
+			args: []string{"--json", "--read-only", "m365", "calendar", "freebusy", "--users", "alex@example.com,sam@example.com"},
 			want: "m365.calendar.freebusy",
 		},
 		{
@@ -82,7 +82,7 @@ func TestM365ReadOnlyPilotCommandsAreExposed(t *testing.T) {
 
 func TestM365PilotCommandsRequireExplicitReadOnlyFlag(t *testing.T) {
 	_ = captureStderr(t, func() {
-		err := Execute([]string{"--json", "m365", "outlook", "search", "--query", "from:felipe"})
+		err := Execute([]string{"--json", "m365", "outlook", "search", "--query", "from:sam"})
 		if err == nil {
 			t.Fatal("expected m365 pilot command without --read-only to fail closed")
 		}

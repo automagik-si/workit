@@ -252,7 +252,7 @@ from plugins.khaw.workit_policy import build_approval_request
 def test_build_approval_request_defaults_to_30_minutes():
     req = build_approval_request(
         argv=["wk", "m365", "outlook", "send", "--to", "a@example.com", "--subject", "Oi"],
-        account="bernardo@hapvida.example",
+        account="alex@example.com",
         requested_by="telegram:123",
     )
 
@@ -335,7 +335,7 @@ def test_write_fails_closed_when_harness_unavailable():
     with pytest.raises(SafetyHarnessUnavailable):
         execute_workit_with_policy(
             ["wk", "m365", "outlook", "send", "--to", "a@example.com"],
-            account="bernardo@hapvida.example",
+            account="alex@example.com",
             requested_by="telegram:123",
             harness=UnavailableHarness(),
             runner=lambda argv: {"executed": True},
@@ -351,7 +351,7 @@ def test_write_denied_does_not_execute():
 
     result = execute_workit_with_policy(
         ["wk", "m365", "outlook", "send", "--to", "a@example.com"],
-        account="bernardo@hapvida.example",
+        account="alex@example.com",
         requested_by="telegram:123",
         harness=DenyingHarness(),
         runner=runner,
@@ -406,7 +406,7 @@ Expected: PASS.
 
 ## Task 6: Add pilot-mode write-disabled tests
 
-**Objective:** Enforce the current Hapvida/Bernardo pilot as read-only even if a write approval harness exists.
+**Objective:** Enforce the current pilot as read-only even if a write approval harness exists.
 
 **Files:**
 - Modify test and implementation from previous tasks.
@@ -426,7 +426,7 @@ class ApprovingHarness:
 def test_pilot_mode_blocks_writes_even_if_harness_approves():
     result = execute_workit_with_policy(
         ["wk", "m365", "outlook", "send", "--to", "a@example.com"],
-        account="bernardo@hapvida.example",
+        account="alex@example.com",
         requested_by="telegram:123",
         harness=ApprovingHarness(),
         runner=lambda argv: {"executed": True},
