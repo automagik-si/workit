@@ -62,7 +62,7 @@ KHAW update model says Workit-like behavior should be additive, not Hermes core 
 
 ### Hermes harness permission surface found
 
-Felipe feedback: do not invent a separate M365/email safety mechanism before using the Hermes harness that already exists.
+Owner feedback: do not invent a separate M365/email safety mechanism before using the Hermes harness that already exists.
 
 Relevant Hermes source:
 
@@ -86,7 +86,7 @@ Implication for Workit/M365:
 - Preferred implementation: a plugin/tool wrapper that emits a structured Hermes approval request using the existing approval/gateway path, with a human-readable prompt containing exact account, recipients, subject/title, operation type, and side effects.
 - Approval TTL must be configurable, defaulting to **30 minutes / 1800 seconds** for gateway popups.
 - All write operations fail closed if the approval harness is unavailable, cannot deliver the popup, times out, receives a malformed response, or if the approved payload hash does not match the command about to execute.
-- No `--force`, no `Mail.Send`, no `Calendars.ReadWrite`, no Teams send/write scopes in the Bernardo/Hapvida pilot without explicit approval and audit trail.
+- No `--force`, no `Mail.Send`, no `Calendars.ReadWrite`, no Teams send/write scopes in the Hapvida pilot without explicit approval and audit trail.
 
 Dedicated contract doc: `docs/plans/2026-05-30-workit-m365-write-approval-contract.md`.
 RLMX Fleet evidence ledger: `/home/genie/workspace/agents/khaw/plugins/khaw/rlmx-council/ledgers/2026-05-30T21-23-47-build.md`.
@@ -106,7 +106,7 @@ RLMX Fleet evidence ledger: `/home/genie/workspace/agents/khaw/plugins/khaw/rlmx
 
 - Add Microsoft 365 as Workit's second provider family, not as a Hermes-only plugin.
 - Use official Microsoft Graph; no scraping or user simulation.
-- Start read-only for Hapvida/Bernardo: mail/calendar first, Teams/SharePoint after policy decisions.
+- Start read-only for Hapvida: mail/calendar first, Teams/SharePoint after policy decisions.
 
 ---
 
@@ -166,7 +166,7 @@ Expected: `ok`.
 
 **Step 3: Commit only if KHAW dirty state is understood**
 
-There is existing unrelated dirty state in KHAW (`scripts/install_local_harness.py`). Do not commit over it blindly. Either stash/snapshot it with Felipe's approval or commit only the manifest/doc changes after reviewing the existing diff.
+There is existing unrelated dirty state in KHAW (`scripts/install_local_harness.py`). Do not commit over it blindly. Either stash/snapshot it with the owner's approval or commit only the manifest/doc changes after reviewing the existing diff.
 
 ---
 
@@ -312,7 +312,7 @@ Support two auth models explicitly:
 
 Do **not** silently default to broad app-only permissions. Hapvida pilot should be read-only and policy-bound.
 
-**Minimum scopes for Bernardo pilot:**
+**Minimum scopes for the pilot:**
 
 - Mail read: `Mail.Read`
 - Calendar read: `Calendars.Read`
@@ -392,7 +392,7 @@ Prefer a `m365` namespace if command-name collisions with Google `calendar` woul
 
 ### Task 8: Add executive briefing command in Workit, not Hermes core
 
-**Objective:** Give KHAW/Hermes a stable CLI to call for Bernardo's daily briefing inputs.
+**Objective:** Give KHAW/Hermes a stable CLI to call for the pilot user's daily briefing inputs.
 
 **Files:**
 - Create: `internal/cmd/briefing.go` or `internal/cmd/m365_briefing.go`
@@ -453,11 +453,11 @@ Hermes/KHAW can turn this into an elegant Portuguese executive narrative.
 
 ---
 
-## Open questions for Felipe/Bernardo
+## Open questions for the owners
 
 1. Should Workit be installed into fresh KHAW machines from GitHub releases, source checkout, or a pinned artifact mirror?
 2. Should M365 delegated OAuth be implemented directly in Workit, or should Workit initially consume a brokered token from a Hapvida-approved gateway?
-3. Should the first Bernardo pilot deliver only an evidence bundle to Hermes, or should Workit itself produce the first executive summary?
+3. Should the first pilot deliver only an evidence bundle to Hermes, or should Workit itself produce the first executive summary?
 4. Should the command namespace be `wk outlook ...` / `wk teams ...` or `wk m365 outlook ...` / `wk m365 teams ...`? Recommendation: use `wk m365 ...` to avoid provider ambiguity.
 5. Does Hapvida require no raw body persistence, or can Workit keep local encrypted caches for dedupe/history?
 
@@ -473,4 +473,4 @@ Hermes/KHAW can turn this into an elegant Portuguese executive narrative.
 3. In Workit, add only provider package + Microsoft scope definitions + tests.
 4. Then implement `wk m365 outlook search` read-only.
 
-This gives a safe, reviewable path from product architecture to Bernardo value without forcing M365 into Omni or Hermes core.
+This gives a safe, reviewable path from product architecture to pilot value without forcing M365 into Omni or Hermes core.
