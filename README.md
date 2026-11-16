@@ -1,9 +1,9 @@
 # workit -- your office, from the terminal.
 
 <p align="center">
-  <a href="https://github.com/automagik-dev/workit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/automagik-dev/workit" alt="License"></a>
-  <a href="https://github.com/automagik-dev/workit/releases"><img src="https://img.shields.io/github/v/release/automagik-dev/workit" alt="Release"></a>
-  <a href="https://golang.org"><img src="https://img.shields.io/github/go-mod/go-version/automagik-dev/workit" alt="Go"></a>
+  <a href="https://github.com/automagik-si/workit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/automagik-si/workit" alt="License"></a>
+  <a href="https://github.com/automagik-si/workit/releases"><img src="https://img.shields.io/github/v/release/automagik-si/workit" alt="Release"></a>
+  <a href="https://golang.org"><img src="https://img.shields.io/github/go-mod/go-version/automagik-si/workit" alt="Go"></a>
 </p>
 
 <p align="center">
@@ -41,7 +41,7 @@
 ### One Command (recommended)
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/automagik-dev/workit/main/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/automagik-si/workit/main/install.sh | sh
 ```
 
 This installs:
@@ -64,7 +64,7 @@ See [INSTALL.md](INSTALL.md) for detailed install options.
 Requires Go 1.21+.
 
 ```bash
-git clone https://github.com/automagik-dev/workit.git
+git clone https://github.com/automagik-si/workit.git
 cd workit
 make build
 ./bin/wk --help
@@ -366,5 +366,5 @@ Full details: [docs/auth.md](docs/auth.md)
 ---
 
 <p align="center">
-  MIT License &middot; <a href="https://github.com/automagik-dev/workit">github.com/automagik-dev/workit</a>
+  MIT License &middot; <a href="https://github.com/automagik-si/workit">github.com/automagik-si/workit</a>
 </p>
